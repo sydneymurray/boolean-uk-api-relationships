@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Doctors {
+  id           Int            @id @default(autoincrement())
+  firstName    String         @db.VarChar(255)
+  lastName     String         @db.VarChar(255)
+  specialty    String         @db.VarChar(255)
+  appointments Appointments[]
+}
+
+model Patients {
+  id           Int            @id @default(autoincrement())
+  firstName    String         @db.VarChar(255)
+  lastName     String         @db.VarChar(255)
+  appointments Appointments[]
+}
+
+model Appointments {
+  id           Int       @id @default(autoincrement())
+  practiceName String    @db.VarChar(255)
+  date         DateTime
+  reason       String    @db.VarChar(255)
+  doctorId     Int
+  patientId    Int?
+  doctor       Doctors   @relation(fields: [doctorId], references: [id])
+  patient      Patients? @relation(fields: [patientId], references: [id])
+}

@@ -1,0 +1,61 @@
+------------------------------------------------------------
+boolean-uk-api-relationships
+
+npx express-generator
+npm install
+npm install prisma
+
+package.json
+  "scripts": {
+    "start": "nodemon ./bin/www"
+  }	
+  
+npx prisma init
+
+// Create the doctors & appointments
+Add ?schema=relations to the end of the URL's
+edit prisma/schema.prisma
+npx prisma migrate dev --name create doctors and appointments
+
+// Start the server
+npm start
+
+// 3006 Error on shadow Database
+  // Check Schema at the end of the SHADOW_DATABASE_URL Exists on elephantSQL 
+  select schema_name from information_schema.schemata;
+  // IF it it not present then execute
+  CREATE SCHEMA shadow
+
+// Could not migrate updated patients schema.prisma file
+// Built it on ElephantSQL directly
+CREATE TABLE "Patients" ("id" SERIAL NOT NULL, "firstName" VARCHAR(255) NOT NULL, 
+  "lastName" VARCHAR(255) NOT NULL,PRIMARY KEY ("id"));
+ALTER TABLE "relations"."Appointments" ADD patientId INTEGER;
+ALTER TABLE "relations"."Appointments" ADD FOREIGN KEY ("patientId") REFERENCES "relations"."Patients"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+
+
+/////////////////////////////////////////////
+Additional Stuff
+
+// Problems syncing db
+npx prisma db push --preview-feature
+
+
+// Create the db
+npx prisma migrate dev --name init --preview-feature
+
+// Update DB changes
+npx prisma migrate dev --name change --preview-feature
+
+// Changes mad on the server need to be synced
+prisma db pull
+
+// THIS WILL DELETE EVERYTHING
+npx prisma migrate reset  
+
+https://www.prisma.io/docs/guides/database/developing-with-prisma-migrate/add-prisma-migrate-to-a-project
+
+INSERT INTO "relations"."Patients"("firstName", "lastName") VALUES('Mike', 'Tyson') 
+
