@@ -17,7 +17,9 @@ function retrieveAll(req, res){
 function retrieveOne(req, res){
   let id = Number(req.params.id)
   if (id - id !== 0) res.json({msg:"Page Not Found"})
-  prisma.patients.findUnique({where: {id}})
+  prisma.patients.findUnique({
+    include: {appointments: true},
+    where: {id}})
     .then(dbResponse => res.json(dbResponse))
 }
 
