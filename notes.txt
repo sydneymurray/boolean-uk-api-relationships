@@ -32,7 +32,8 @@ CREATE TABLE "Patients" ("id" SERIAL NOT NULL, "firstName" VARCHAR(255) NOT NULL
   "lastName" VARCHAR(255) NOT NULL,PRIMARY KEY ("id"));
 ALTER TABLE "relations"."Appointments" ADD patientId INTEGER;
 ALTER TABLE "relations"."Appointments" ADD FOREIGN KEY ("patientId") REFERENCES "relations"."Patients"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
+npx prisma db pull --force
+npx prisma generate
 
 
 
@@ -58,4 +59,7 @@ npx prisma migrate reset
 https://www.prisma.io/docs/guides/database/developing-with-prisma-migrate/add-prisma-migrate-to-a-project
 
 INSERT INTO "relations"."Patients"("firstName", "lastName") VALUES('Mike', 'Tyson') 
+
+include: {doctor: true, patient: true}
+include: {doctor: {select: {firstName: true, lastName: true}}, patient:{select: {firstName: true, lastName: true}}}
 

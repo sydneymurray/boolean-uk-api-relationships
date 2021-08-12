@@ -8,6 +8,7 @@ console.log("Router")
 
 patientRouter.post("/", patientController.createOne)
 patientRouter.get("/", patientController.retrieveAll)
+patientRouter.get("/:id/doctors", patientController.patientsDoctors)
 patientRouter.get("/:id", patientController.retrieveOne)
 patientRouter.delete("/:id", patientController.deleteOne)
 patientRouter.patch("/:id", patientController.updateOne)

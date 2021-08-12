@@ -36,6 +36,29 @@ function updateOne(req, res){
     .then(dbResponse => res.json(dbResponse))
 }
 
-module.exports = {createOne, retrieveAll, retrieveOne, deleteOne, updateOne}
+function patientsDoctors(req, res){
+  let id = Number(req.params.id)
+  prisma.appointments.findMany({
+    select: {doctor: true},
+    where: {patientId: id},
+    orderBy: {date: "desc"}})
+    .then(dbResponse => res.json(dbResponse))
+  }
+
+module.exports = {createOne, retrieveAll, retrieveOne, deleteOne, updateOne, patientsDoctors}
 
 
+/*
+// Alternative method
+function patientsDoctors(req, res){
+  let id = Number(req.params.id)
+  prisma.appointments.findMany({
+    include: {doctor: true, patient: true},  
+    where: {patientId: id},
+    orderBy: {date: "desc"}})
+    .then(dbResponse => res.json(dbResponse.map(appointment => {
+      return appointment.doctor.firstName+" "+appointment.doctor.lastName})))
+  }
+
+
+*/
